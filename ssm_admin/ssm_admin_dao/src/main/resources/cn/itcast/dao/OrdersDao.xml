@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.dao.OrdersDao">
+    <!--查询所有订单-->
+    <resultMap id="findMap" type="orders">
+        <id column="id" property="id"/>
+        <association property="product" column="productId" javaType="product" select="cn.itcast.dao.ProductDao.findById"/>
+        <association property="member" column="memberId" javaType="member" select="cn.itcast.dao.MemberDao.findById" fetchType="lazy"/>
+        <collection property="travellers" column="id" ofType="traveller" fetchType="lazy" select="cn.itcast.dao.TravellerDao.findByOrderId"/>
+
+    </resultMap>
+    <select id="findAll" parameterType="String" resultMap="findMap">
+        --         SELECT * FROM ORDERs  WHERE id in(select id from view4orders where  str like '%${value}%')
+        select * from orders
+        <where>
+            <if test="_parameter !=null and _parameter.length > 0">
+                 ORDERNUM like '%${value}%'
+            </if>
+        </where>
+        order by ROWNUM desc
+    </select>
+
+
+    <select id="findById" parameterType="String" resultMap="findMap">
+--         SELECT * FROM ORDERs  WHERE id in(select id from view4orders where  str like '%${value}%')
+            select *  from orders WHERE id=#{id}
+    </select>
+
+    <delete id="delete" parameterType="string">
+        DELETE from ORDERS WHERE id=#{id}
+    </delete>
+
+    <update id="payed" parameterType="string">
+        UPDATE ORDERS set ORDERSTATUS = 1 WHERE id = #{id}
+    </update>
+    <update id="unPayed" parameterType="string">
+        UPDATE ORDERS set ORDERSTATUS = 0 WHERE id = #{id}
+    </update>
+    <update id="updatePayType" parameterType="orders">
+        UPDATE ORDERS set PAYTYPE=#{payType} WHERE id =#{id}
+    </update>
+</mapper>

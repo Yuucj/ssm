@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.dao.RoleDao">
+    <resultMap id="roleMap" type="role">
+        <id column="id" property="id"/>
+        <collection property="permissions" column="id" select="cn.itcast.dao.PermissionDao.findByRoleId" ofType="permission" fetchType="lazy"/>
+    </resultMap>
+
+    <select id="findAll" parameterType="string" resultMap="roleMap">
+        SELECT * FROM  ROLE
+            <where>
+                <if test="_parameter !=null and _parameter.length > 0">
+                ROLEDESC LIKE '%${value}%'
+                </if>
+            </where>
+            order by rownum desc
+    </select>
+    <select id="findById" parameterType="string" resultMap="roleMap">
+        SELECT * FROM ROLE WHERE ID =#{ID}
+    </select>
+    <select id="findByUserId" parameterType="string" resultMap="roleMap">
+        SELECT * FROM ROLE WHERE ID IN (SELECT ROLEID from USERS_ROLE WHERE USERID = #{uid})
+    </select>
+    <select id="findUsableByUid" parameterType="string" resultMap="roleMap">
+          SELECT * FROM ROLE WHERE id not in (SELECT ROLEID FROM USERS_ROLE WHERE USERID=#{uid})
+    </select>
+</mapper>

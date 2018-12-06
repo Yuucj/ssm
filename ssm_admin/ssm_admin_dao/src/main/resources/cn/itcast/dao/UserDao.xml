@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.dao.UserDao">
+    <resultMap id="userMap" type="userInfo">
+        <id column="id" property="id"/>
+        <collection property="roles" column="id" select="cn.itcast.dao.RoleDao.findByUserId" ofType="role" fetchType="lazy"/>
+    </resultMap>
+    <select id="findAll" parameterType="string" resultMap="userMap">
+        select * from users
+        <where>
+        <if test="_parameter !=null and _parameter.length > 0">
+           username like '%${value}%'
+        </if>
+        </where>
+        order by rownum desc
+    </select>
+    <select id="findById" resultMap="userMap" parameterType="string">
+        SELECT * from USERS WHERE ID = #{id}
+    </select>
+    <select id="findByUsername" resultMap="userMap" parameterType="string">
+        SELECT * FROM USERS WHERE USERNAME = #{username}
+    </select>
+</mapper>

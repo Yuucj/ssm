@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.dao.ProductDao">
+    <!--查找所有-->
+    <select id="findAll" parameterType="String" resultType="product">
+        SELECT * FROM PRODUCT  WHERE id in(select id from view4findAll
+        <where>
+            <if test="_parameter !=null and _parameter.length > 0">
+                str like '%${value}%'
+            </if>
+        </where>
+          )
+        order by ROWNUM desc
+    </select>
+<!--保存-->
+    <insert id="save" parameterType="product">
+        INSERT INTO PRODUCT(productNum,productName,cityName,departureTime,productPrice,productDesc,productStatus) VALUES (#{productNum},#{productName},#{cityName},#{departureTime},#{productPrice},#{productDesc},#{productStatus})
+    </insert>
+
+    <!--删除-->
+    <delete id="delete" parameterType="string">
+        <if test="array !=null and array.length > 0">
+            DELETE FROM PRODUCT WHERE id in
+            <foreach collection="array" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+    </delete>
+    <!--id查找-->
+    <select id="findById" parameterType="string" resultType="product">
+        SELECT * FROM  PRODUCT WHERE id=#{id}
+    </select>
+    <!--更新-->
+    <update id="update" parameterType="product">
+        UPDATE PRODUCT SET PRODUCTNUM = #{productNum},PRODUCTNAME=#{productName},DEPARTURETIME=#{departureTime},CITYNAME=#{cityName},PRODUCTPRICE=#{productPrice},PRODUCTSTATUS=#{productStatus},PRODUCTDESC=#{productDesc} WHERE id=#{id}
+    </update>
+</mapper>
