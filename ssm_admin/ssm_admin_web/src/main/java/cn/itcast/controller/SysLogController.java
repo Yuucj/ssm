@@ -38,7 +38,7 @@ public class SysLogController {
 
     @RequestMapping("/export")
     public void exportSysLog(HttpServletResponse response) throws Exception {
-        List<SysLog> logs = sysLogService.findAll1();
+        List<SysLog> logs = sysLogService.export();
         try {
             XSSFWorkbook wb = ExportSysLogUtil.getWorkBook(logs);
             String fileName = "sysLog.xlsx";

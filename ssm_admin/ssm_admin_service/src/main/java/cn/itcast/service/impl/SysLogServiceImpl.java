@@ -31,9 +31,12 @@ public class SysLogServiceImpl implements SysLogService {
         sysLogDao.save(sysLog);
     }
 
+
     @Override
-    public List<SysLog> findAll1() {
-        return sysLogDao.find();
+    public List<SysLog> export() throws Exception {
+        List<SysLog> logs = sysLogDao.find();
+        sysLogDao.deleteAll();
+        return logs;
     }
 
 }

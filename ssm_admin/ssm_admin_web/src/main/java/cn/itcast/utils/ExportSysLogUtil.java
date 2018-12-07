@@ -2,7 +2,6 @@ package cn.itcast.utils;
 
 import cn.itcast.domain.SysLog;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -16,7 +15,7 @@ public class ExportSysLogUtil {
     public static XSSFWorkbook getWorkBook(List<SysLog> logs){
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("sysLog");
+        XSSFSheet sheet = workbook.createSheet("sysLog");
         Row titleRow = sheet.createRow(0);//创建第一行，起始为0
         titleRow.createCell(0).setCellValue(0);
         titleRow.createCell(1).setCellValue("ID");//第一列

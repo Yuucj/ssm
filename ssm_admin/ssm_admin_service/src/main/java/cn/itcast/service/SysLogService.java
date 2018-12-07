@@ -13,5 +13,6 @@ public interface SysLogService {
 
     void save(SysLog sysLog) throws Exception;
 
-    List<SysLog> findAll1();
+
+    List<SysLog> export() throws Exception;
 }
